@@ -13,13 +13,14 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.Toast;
 
 
 import java.util.ArrayList;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity implements AddTodoDialog.AddTodoDialogListener {
 
     ArrayList<ToDo> records = new ArrayList<ToDo>();
 
@@ -167,5 +168,14 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
+    @Override
+    public void onFinishEditDialog(ToDo todo) {
+
+        Toast.makeText(this, "TITLE RETURNED TO ACTIVITY = " + todo.getTitle() + "\nDESC = " + todo.getDescription()
+                + "\nDATE = " + todo.getDate()
+                + "\nSTATUS = " + todo.getStatus(), Toast.LENGTH_LONG).show();
+
+
+    }
 
 }
