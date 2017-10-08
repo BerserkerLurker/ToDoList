@@ -25,6 +25,10 @@ public class CustomAdapter extends BaseAdapter {
         myList = list;
     }
 
+    public void addToDoItem(ToDo todo)
+    {
+        myList.add(todo);
+    }
 
     // override the following methods for custom adapter
 
