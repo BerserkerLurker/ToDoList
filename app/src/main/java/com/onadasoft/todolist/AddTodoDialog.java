@@ -77,6 +77,7 @@ public class AddTodoDialog extends DialogFragment implements View.OnClickListene
             case R.id.cancelButton:
 
                 Log.i("BLA", "CANCEL");
+                dismiss();
                 break;
             case R.id.saveButton:
 
