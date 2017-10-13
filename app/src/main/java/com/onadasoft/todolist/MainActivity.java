@@ -21,7 +21,7 @@ import android.widget.Toast;
 import java.util.ArrayList;
 
 public class MainActivity extends AppCompatActivity implements AddTodoDialog.AddTodoDialogListener,
-        AdapterView.OnItemLongClickListener, AdapterView.OnItemClickListener {
+        UpdateTodoDialog.UpdateTodoDialogListener, AdapterView.OnItemLongClickListener, AdapterView.OnItemClickListener {
 
     ArrayList<ToDo> records = new ArrayList<ToDo>();
 
@@ -251,9 +251,11 @@ public class MainActivity extends AppCompatActivity implements AddTodoDialog.Add
 
         Bundle args = new Bundle();
 
+        args.putLong("id", todo.getId());
         args.putString("title", todo.getTitle());
         args.putString("description", todo.getDescription());
         args.putString("date", todo.getDate());
+        args.putInt("status", todo.getStatus());
 
         updateTodoDialog.setArguments(args);
         updateTodoDialog.show(fm, "Update Todo");
@@ -273,7 +275,7 @@ public class MainActivity extends AppCompatActivity implements AddTodoDialog.Add
 
     }
 
-    public void updateTodoDB(ToDo todo, Integer itemNum)
+    public void updateTodoDB(ToDo todo)
     {
         ToDoDatabase todoDb = new ToDoDatabase(this);  // get read - write database
         SQLiteDatabase db = todoDb.getWritableDatabase();
@@ -288,7 +290,7 @@ public class MainActivity extends AppCompatActivity implements AddTodoDialog.Add
 
         try
         {
-            Integer result = db.update("TODO", vals, "id = ?", new String[]{itemNum.toString()});
+            Integer result = db.update("TODO", vals, "id = ?", new String[]{ todo.getId().toString()});
 
             if (result == -1)
             {
@@ -297,6 +299,9 @@ public class MainActivity extends AppCompatActivity implements AddTodoDialog.Add
             else
             {
                 Toast.makeText(this, "record updated" , Toast.LENGTH_SHORT).show();
+                // update list item
+
+                records.set(itemToUpdate, todo);
                 arrayAdapter.notifyDataSetChanged();
             }
         }
@@ -328,17 +333,31 @@ public class MainActivity extends AppCompatActivity implements AddTodoDialog.Add
             todo.setStatus(0);
         }
         // try to write to db - if success toggle status
-        updateTodoDB(todo, ((ToDo) arrayAdapter.getItem(i)).getId().intValue());
+        updateTodoDB(todo);
 
         return true;
     }
 
+    Integer itemToUpdate = -1;
+
     @Override
     public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
 
+        itemToUpdate = i;
         Toast.makeText(this, "Regular click", Toast.LENGTH_SHORT).show();
         ToDo todo = arrayAdapter.getTodo(i);
         showUpdateTodoDialog(todo);
+
+    }
+
+    @Override
+    public void onFinishUpdateDialog(ToDo todo) {
+
+        Toast.makeText(this, "TITLE RETURNED TO ACTIVITY = " + todo.getTitle() + "\nDESC = " + todo.getDescription()
+                + "\nDATE = " + todo.getDate()
+                + "\nSTATUS = " + todo.getStatus(), Toast.LENGTH_LONG).show();
+
+        updateTodoDB(todo);
 
     }
 }

@@ -19,9 +19,11 @@ import android.widget.Toast;
 public class UpdateTodoDialog extends DialogFragment implements View.OnClickListener {
 
     public interface UpdateTodoDialogListener {
-        void onFinishEditDialog(ToDo todo);
+        void onFinishUpdateDialog(ToDo todo);
     }
 
+    private Long id = -1l;
+    private Integer status = 0;
     private EditText titleEditText;
     private EditText descriptionEditText;
     private DatePicker datePicker;
@@ -39,6 +41,8 @@ public class UpdateTodoDialog extends DialogFragment implements View.OnClickList
         titleEditText = (EditText) view.findViewById(R.id.update_title_editText);
         descriptionEditText = (EditText) view.findViewById(R.id.update_description_editText);
         datePicker = (DatePicker) view.findViewById(R.id.update_datePicker);
+
+        id = getArguments().getLong("id");
 
         String theTitle = getArguments().getString("title");
         titleEditText.setText(theTitle);
@@ -76,7 +80,6 @@ public class UpdateTodoDialog extends DialogFragment implements View.OnClickList
         super.onAttach(context);
 
         try {
-            // instantiate the AddTodoDialogListener to send events back
             listener = (UpdateTodoDialogListener) context;
         } catch (ClassCastException e) {
             // activity doesn't implement the interface
@@ -100,21 +103,22 @@ public class UpdateTodoDialog extends DialogFragment implements View.OnClickList
                 Log.i("TITLE TO SAVE = ", titleEditText.getText().toString());
                 Log.i("DESCRIPTION TO SAVE = ", descriptionEditText.getText().toString());
 
-                UpdateTodoDialogListener activity = (UpdateTodoDialogListener) getActivity();
-
-                ToDo todo = new ToDo("", "", "", 0);
+                UpdateTodoDialogListener activity;
+                activity = (UpdateTodoDialogListener) getActivity();
 
                 String month = String.valueOf(datePicker.getMonth()+1);
                 String year = String.valueOf(datePicker.getYear());
                 String day = String.valueOf(datePicker.getDayOfMonth());
                 String dateAsString = month + "/" + day + "/" + year;
 
+                ToDo todo = new ToDo("", "", "", 0);
+                todo.setId(id);
                 todo.setTitle(titleEditText.getText().toString());
                 todo.setDescription(descriptionEditText.getText().toString());
                 todo.setDate(dateAsString);
-                todo.setStatus(0);
+                todo.setStatus(status);
 
-                activity.onFinishEditDialog(todo);
+                activity.onFinishUpdateDialog(todo);
 
                 dismiss();
                 break;
