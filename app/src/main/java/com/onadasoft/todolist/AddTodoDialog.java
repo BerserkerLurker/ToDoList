@@ -54,7 +54,6 @@ public class AddTodoDialog extends DialogFragment implements View.OnClickListene
             throw new ClassCastException(context.toString()
                     + " must implement AddTodoDialogListener");
         }
-
     }
 
     @Override
@@ -63,7 +62,6 @@ public class AddTodoDialog extends DialogFragment implements View.OnClickListene
         switch (view.getId()) {
             case R.id.cancelButton:
 
-                Log.i("BLA", "CANCEL");
                 dismiss();
                 break;
             case R.id.saveButton:
@@ -73,7 +71,6 @@ public class AddTodoDialog extends DialogFragment implements View.OnClickListene
                 Log.i("DESCRIPTION TO SAVE = ", descriptionEditText.getText().toString());
 
                 AddTodoDialogListener activity = (AddTodoDialogListener) getActivity();
-
                 ToDo todo = new ToDo("", "", "", 0);
 
                 String month = String.valueOf(datePicker.getMonth()+1);

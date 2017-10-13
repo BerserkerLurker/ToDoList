@@ -1,9 +1,7 @@
 package com.onadasoft.todolist;
 
-import android.app.Dialog;
 import android.app.DialogFragment;
 import android.content.Context;
-import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -12,8 +10,6 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
-import android.widget.Toast;
-
 
 
 public class UpdateTodoDialog extends DialogFragment implements View.OnClickListener {
@@ -97,7 +93,7 @@ public class UpdateTodoDialog extends DialogFragment implements View.OnClickList
         switch (view.getId()) {
             case R.id.update_cancelButton:
 
-                Log.i("Bla", "CANCEL");
+                Log.i("Button Pressed", "CANCEL");
                 dismiss();
                 break;
             case R.id.update_saveButton:
