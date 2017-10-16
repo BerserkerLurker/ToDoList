@@ -15,7 +15,7 @@ import android.widget.EditText;
 public class UpdateTodoDialog extends DialogFragment implements View.OnClickListener {
 
     public interface UpdateTodoDialogListener {
-        void onFinishUpdateDialog(ToDo todo);
+        void onFinishUpdateDialog(ToDo todo); // callback for update todo
     }
 
     private Long id = -1l;
@@ -23,7 +23,6 @@ public class UpdateTodoDialog extends DialogFragment implements View.OnClickList
     private EditText titleEditText;
     private EditText descriptionEditText;
     private DatePicker datePicker;
-    private UpdateTodoDialogListener listener;
 
     public UpdateTodoDialog() {
         // Empty constructor
@@ -73,19 +72,6 @@ public class UpdateTodoDialog extends DialogFragment implements View.OnClickList
         return view;
     }
 
-    @Override
-    public void onAttach(Context context) {
-        super.onAttach(context);
-
-        try {
-            listener = (UpdateTodoDialogListener) context;
-        } catch (ClassCastException e) {
-            // activity doesn't implement the interface
-            throw new ClassCastException(context.toString()
-                    + " must implement UpdateTodoDialogListener");
-        }
-
-    }
 
     @Override
     public void onClick(View view) {
@@ -104,11 +90,13 @@ public class UpdateTodoDialog extends DialogFragment implements View.OnClickList
                 UpdateTodoDialogListener activity;
                 activity = (UpdateTodoDialogListener) getActivity();
 
+                // build string from date components
                 String month = String.valueOf(datePicker.getMonth()+1);
                 String year = String.valueOf(datePicker.getYear());
                 String day = String.valueOf(datePicker.getDayOfMonth());
                 String dateAsString = month + "/" + day + "/" + year;
 
+                // setup todo
                 ToDo todo = new ToDo("", "", "", 0);
                 todo.setId(id);
                 todo.setTitle(titleEditText.getText().toString());

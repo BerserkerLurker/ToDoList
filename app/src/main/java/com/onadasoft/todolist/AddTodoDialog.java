@@ -11,11 +11,11 @@ import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
 
-
+// Dialog to add a new todo item
 public class AddTodoDialog extends DialogFragment implements View.OnClickListener {
 
     public interface AddTodoDialogListener {
-        void onFinishEditDialog(ToDo todo);
+        void onFinishAddDialog(ToDo todo); // callback for adding new todo
     }
 
     private EditText titleEditText;
@@ -42,19 +42,7 @@ public class AddTodoDialog extends DialogFragment implements View.OnClickListene
 
         return view;
     }
-    @Override
-    public void onAttach(Context context) {
-        super.onAttach(context);
 
-        try {
-            // instantiate the AddTodoDialogListener to send events back
-            listener = (AddTodoDialogListener) context;
-        } catch (ClassCastException e) {
-            // activity doesn't implement the interface
-            throw new ClassCastException(context.toString()
-                    + " must implement AddTodoDialogListener");
-        }
-    }
 
     @Override
     public void onClick(View view) {
@@ -73,17 +61,20 @@ public class AddTodoDialog extends DialogFragment implements View.OnClickListene
                 AddTodoDialogListener activity = (AddTodoDialogListener) getActivity();
                 ToDo todo = new ToDo("", "", "", 0);
 
+                // get date info and build a string
                 String month = String.valueOf(datePicker.getMonth()+1);
                 String year = String.valueOf(datePicker.getYear());
                 String day = String.valueOf(datePicker.getDayOfMonth());
                 String dateAsString = month + "/" + day + "/" + year;
 
+                // setup new todo info
                 todo.setTitle(titleEditText.getText().toString());
                 todo.setDescription(descriptionEditText.getText().toString());
                 todo.setDate(dateAsString);
                 todo.setStatus(0);
 
-                activity.onFinishEditDialog(todo);
+                // pass back todo to any listener
+                activity.onFinishAddDialog(todo);
 
                 dismiss();
                 break;

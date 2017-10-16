@@ -1,5 +1,6 @@
 package com.onadasoft.todolist;
 
+// ToDo item
 public class ToDo {
 
     private Long id = -1l;

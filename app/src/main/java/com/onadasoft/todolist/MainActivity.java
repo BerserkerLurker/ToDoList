@@ -50,17 +50,17 @@ public class MainActivity extends AppCompatActivity implements AddTodoDialog.Add
     @Override
     protected void onPause() {
         super.onPause();
-        records.clear();
+        records.clear(); // clear records on pause
     }
 
     @Override
     protected void onResume() {
         super.onResume();
-        records.clear();
+        records.clear(); // clear and reread on resume
         readDB();
     }
 
-    @Override
+    @Override // inflate menu
     public boolean onCreateOptionsMenu(Menu menu) {
 
         MenuInflater inflater = getMenuInflater();
@@ -73,20 +73,20 @@ public class MainActivity extends AppCompatActivity implements AddTodoDialog.Add
     public boolean onOptionsItemSelected(MenuItem item) {
 
         Integer itemId = item.getItemId();
-        if (itemId == R.id.add_todo)
+        if (itemId == R.id.add_todo) // select add todo
         {
             showAddTodoDialog();
         }
-        else if (itemId == R.id.view_completed)
+        else if (itemId == R.id.view_completed) // select show completed todo list
         {
-            Intent i = new Intent(this, CompletedTodoActivity.class);
+            Intent i = new Intent(this, CompletedTodoActivity.class); // start the new activity
             startActivity(i);
         }
 
         return super.onOptionsItemSelected(item);
     }
 
-
+    // fetches all todos
     private void readDB()
     {
         Runnable runnable = new Runnable() {
@@ -129,8 +129,8 @@ public class MainActivity extends AppCompatActivity implements AddTodoDialog.Add
                 finally {
 
                     sortByDateAsc();
-                    arrayAdapter.notifyDataSetChanged();
                     db.close();
+                    arrayAdapter.notifyDataSetChanged();
                 }
             }
         };
@@ -138,7 +138,7 @@ public class MainActivity extends AppCompatActivity implements AddTodoDialog.Add
         runnable.run();
     }
 
-
+    // add todo item to database
     public void addTodoDB(ToDo todo)
     {
         ToDoDatabase todoDb = new ToDoDatabase(this);  // get read - write database
@@ -162,14 +162,13 @@ public class MainActivity extends AppCompatActivity implements AddTodoDialog.Add
             todo.setId(resultId);
             arrayAdapter.addToDoItem(todo);
             sortByDateAsc();
-
-            arrayAdapter.notifyDataSetChanged();
         }
 
         db.close();
+        arrayAdapter.notifyDataSetChanged();
     }
 
-
+    // displays the add todo dialog
     private void showAddTodoDialog() {
         FragmentManager fm = getFragmentManager();
 
@@ -178,7 +177,7 @@ public class MainActivity extends AppCompatActivity implements AddTodoDialog.Add
         addTodoDialog.show(fm, "Add Todo");
     }
 
-
+    // displays the update todo dialog with args prepopulated
     private void showUpdateTodoDialog(ToDo todo) {
 
         FragmentManager fm = getFragmentManager();
@@ -200,7 +199,7 @@ public class MainActivity extends AppCompatActivity implements AddTodoDialog.Add
     }
 
     @Override
-    public void onFinishEditDialog(ToDo todo) {
+    public void onFinishAddDialog(ToDo todo) {
 
         // Toast.makeText(this, "TITLE RETURNED TO ACTIVITY = " + todo.getTitle() + "\nDESC = " + todo.getDescription()
         //        + "\nDATE = " + todo.getDate()
@@ -218,6 +217,7 @@ public class MainActivity extends AppCompatActivity implements AddTodoDialog.Add
 
     }
 
+    // call update on db
     public void updateTodoDB(ToDo todo)
     {
         ToDoDatabase todoDb = new ToDoDatabase(this);  // get read - write database
@@ -252,12 +252,12 @@ public class MainActivity extends AppCompatActivity implements AddTodoDialog.Add
 
         }
         finally {
-            arrayAdapter.notifyDataSetChanged();
             db.close();
+            arrayAdapter.notifyDataSetChanged();
         }
     }
 
-
+    // toggle  the status
     public void updateStatus(Integer i)
     {
         ToDoDatabase todoDb = new ToDoDatabase(this);  // get read - write database
@@ -298,6 +298,7 @@ public class MainActivity extends AppCompatActivity implements AddTodoDialog.Add
     }
 
 
+    // on long click update status
     @Override
     public boolean onItemLongClick(AdapterView<?> adapterView, View view, int i, long l) {
 
@@ -319,6 +320,7 @@ public class MainActivity extends AppCompatActivity implements AddTodoDialog.Add
     }
 
 
+    // regular click update to do item values
     @Override
     public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
 
@@ -328,6 +330,7 @@ public class MainActivity extends AppCompatActivity implements AddTodoDialog.Add
 
     }
 
+    // callback for finishing update
     @Override
     public void onFinishUpdateDialog(ToDo todo) {
 
@@ -346,6 +349,7 @@ public class MainActivity extends AppCompatActivity implements AddTodoDialog.Add
 
     }
 
+    // helper to sort asc
     private void sortByDateAsc()
     {
         // sort records ascending
@@ -359,6 +363,7 @@ public class MainActivity extends AppCompatActivity implements AddTodoDialog.Add
         });
     }
 
+    // convert a date in string format to Date
     private Date convertStringToDate(String dateAsString)
     {
         Date date = new Date();
